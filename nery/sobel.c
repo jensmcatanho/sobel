@@ -1,9 +1,9 @@
-#include "libimg.h"
+#include "libimg.c"
 
 #define TRUE (0==0)
 #define FALSE (0==1)
 
-#define DEBUG 0 
+#define DEBUG 0
 
 int main(int argc, char **argv)
 {
@@ -66,7 +66,8 @@ int main(int argc, char **argv)
             }
         }
     }
-
+    fp = fopen("inter.ppm", "wb");
+    output_ppm(fp, image_sobel);
     to_greyscale(image_sobel);
 
     ppm_image res;
@@ -91,4 +92,3 @@ int main(int argc, char **argv)
 
     return 0;
 }
-
