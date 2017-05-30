@@ -28,14 +28,24 @@ void* fail(char* message){
 }
 
 /**
- * quickly saves a given image buffer to ./debug.ppm, for testing purposes.
+ * saves a given image buffer to a file.
  * @param image : a buffer cointaining a PPM image to be saved
+ * @param file : a filepath
+ * @return void
+ */
+void saveImage(ppm_image image, char* filename){
+ FILE* file = fopen(filename, "wb");
+ output_ppm(file, image);
+ fclose(file);
+}
+/**
+ * saves a given image buffer to a debug file, for testing purposes
+ * as saveImage, but always saves to debug.ppm
+ * @param image
  * @return void
  */
 void quickSaveImage(ppm_image image){
-  FILE* file = fopen("debug.ppm", "wb");
-  output_ppm(file, image);
-  fclose(file);
+  saveImage(image, "debug.ppm");
 }
 
 /**
