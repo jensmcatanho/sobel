@@ -99,3 +99,22 @@ void transformPixelSobel(ppm_image original, unsigned int x, unsigned int y, ppm
 
   put_pixel_unsafe(new, x, y, char_val, char_val, char_val);
 }
+
+/**
+ * allocates a PPM image on shared memory.
+ * combines Nery's alloc_img logic w/ shared memory blocks
+ * created w/ createSharedMemoryBlock.
+ * @param  width  : image width
+ * @param  height : image height
+ * @return ppm_image : allocated image
+ */
+ppm_image allocSharedImage(unsigned int width, unsigned long height){
+  ppm_image image;
+  image = createSharedMemoryBlock(sizeof(image_t));
+  image->buf = createSharedMemoryBlock(width * height * sizeof(pixel));
+  image->width = width;
+  image->height = height;
+  image->high = 0;
+  image->max_color = 255;
+  return image;
+}
