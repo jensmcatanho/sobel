@@ -1,4 +1,21 @@
 #include <stdbool.h>
+#include <sys/mman.h>
+
+/**
+ * allocates a shared memory block of the given size.
+ * uses POSIX mmap. the block created is read/write-enabled,
+ * and can be acessed by all child process of this process;
+ * and other processes cannot get a pointer to it (it's annonymous)
+ * @param size : size in bytes
+ */
+void* createSharedMemoryBlock(size_t size){
+    return mmap(NULL,
+        size,
+        PROT_READ | PROT_WRITE,
+        MAP_ANONYMOUS | MAP_SHARED,
+        0, 0
+    );
+}
 
 /**
  * prints an error message and exists the program w/ error code.
