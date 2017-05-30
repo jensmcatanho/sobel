@@ -5,6 +5,14 @@
 #include <sys/wait.h>
 #include <string.h>
 
+/**
+ * applies the Sobel transform to a collumn slice of a given image.
+ * this will be run by each process
+ * @param original    : the original image
+ * @param start       : start offset of the collumn slice
+ * @param end         : end offset of the collumn slice
+ * @param destination : destination image
+ */
 void sobelImageSlice(ppm_image original, unsigned int start, unsigned int end, ppm_image destination){
   for(unsigned int i = start; i < end; i++){
     for(unsigned int j = 1; j < destination->height -2; j++){
@@ -57,7 +65,7 @@ int main(int numArgs, char **args){
       // if at the first slice, adds +1 to starting collumn
       if(start == 0) start++;
       // if at the last slice, adds the remainder collumns in case the slice division was uneven
-      if(i >= numProcesses-1) end += remainderSlice;
+      if(i >= numProcesses-1) end += remainderSlice -2;
       printf("process %i handling collumns %i-%i\n", getpid(), start, end);
       sobelImageSlice(wMargins, start, end, result);
       exit(0);
