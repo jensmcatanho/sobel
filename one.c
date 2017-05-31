@@ -19,17 +19,12 @@ void sobelImageSlice(ppm_image original, unsigned int start, unsigned int end, p
       transformPixelSobel(original, i, j, destination);
     }
   }
-  char file[20];
-  // sprintf(file, "debug%i.ppm", start);
-  // saveImage(destination, file);
 }
 
 int main(int numArgs, char **args){
-
-  char* filePath = "./data/escola_artes_visuais.ppm";
-
+  if(numArgs != 3) fail("usage: ./one <input ppm> <output ppm>");
   // reads source image file
-  FILE* originalImageFile = fopen(filePath, "rb");
+  FILE* originalImageFile = fopen(args[1], "rb");
     if(!originalImageFile) fail("Could not read original image file");
 
   // loads source image
@@ -79,7 +74,7 @@ int main(int numArgs, char **args){
     waiting--;
   }
 
-  quickSaveImage(result);
+  saveImage(result, args[2]);
 
   return 0;
 }
