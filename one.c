@@ -25,7 +25,7 @@ int main(int numArgs, char **args){
   fill_img(result, 0,0,0); // fills it with black pixels
 
   // Process control
-  unsigned short numProcesses = 4;
+  unsigned short numProcesses = 5;
   unsigned short waiting = numProcesses; //the number of unfinished processes
   pid_t pids[numProcesses]; //array which will have the PIDs of child processes
 
