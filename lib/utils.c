@@ -49,6 +49,17 @@ void quickSaveImage(ppm_image image){
 }
 
 /**
+ * returns the size of a ppp_image's buffer.
+ * that's the size ONLY of the buffer (buf property),
+ * not of the image type as a whole.
+ * @param  image : a ppm_image
+ * @return unsigned long : buf's size
+ */
+unsigned long sizeOfImageBuffer(ppm_image image){
+  return image->width * image->height * sizeof(pixel);
+}
+
+/**
  * adds a one-pixel thick box margin around a given ppm image buffer.
  * take note that this increases the image size by two rows and collumns
  * @param  original
