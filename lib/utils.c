@@ -94,8 +94,9 @@ unsigned int** getImageSliceRanges(ppm_image image, unsigned int numSlices){
 ppm_image addMargins(ppm_image original){
   ppm_image result = alloc_img(original->width +2, original->height +2);
   fill_img(result, 0,0,0);
-  for (unsigned int i = 0; i < result->width; i++) {
-    for (unsigned int j = 0; j < result->height; j++) {
+  unsigned int i, j;
+  for (i = 0; i < result->width; i++) {
+    for (j = 0; j < result->height; j++) {
       bool isMargin = (
         ( (i==0) || (i==result->width-1) ) ||
         ( (j==0) || (j==result->height-1) )
@@ -156,8 +157,9 @@ void transformPixelSobel(ppm_image original, unsigned int x, unsigned int y, ppm
  * @param destination : destination image
  */
 void sobelImageSlice(ppm_image original, unsigned int start, unsigned int end, ppm_image destination){
-  for(unsigned int i = start; i < end; i++){
-    for(unsigned int j = 1; j < destination->height -2; j++){
+  unsigned int i, j;
+  for(i = start; i < end; i++){
+    for(j = 1; j < destination->height -2; j++){
       transformPixelSobel(original, i, j, destination);
     }
   }

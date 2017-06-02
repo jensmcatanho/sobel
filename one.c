@@ -32,9 +32,10 @@ int main(int numArgs, char **args){
   //section of the image each process will work on
   unsigned int sliceSize = wMargins->width / numProcesses;
   unsigned int remainderSlice = wMargins->width % numProcesses; //if the division was uneven, stores the remainder so we can add it later to the last slice
+  unsigned short i;
 
   // forks [numProcesses] processes.
-  for(unsigned short i = 0; i < numProcesses; i++){
+  for(i = 0; i < numProcesses; i++){
     pids[i] = fork(); //adds the forked process PID to pids[]
     if(pids[i] == -1) fail("Failed at forking process");
 
