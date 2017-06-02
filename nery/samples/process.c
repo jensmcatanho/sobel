@@ -5,6 +5,20 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+void writePipe(int* P){
+  fclose(P[0]);
+  write(P[1], "1234", 5);
+}
+
+void* readPipe(int* P){
+  int bytesRead; int bufferSize = 1024;
+  void* buffer = createSharedMemoryBlock(bufferSize);
+  fclose(P[1]);
+
+  bytesRead = read(P[0], buffer, bufferSize);
+  return buffer;
+}
+
 int main(int argc, char **argv)
 {
     pid_t pid;
