@@ -5,22 +5,6 @@
 #include <sys/wait.h>
 #include <string.h>
 
-/**
- * applies the Sobel transform to a collumn slice of a given image.
- * this will be run by each process
- * @param original    : the original image
- * @param start       : start offset of the collumn slice
- * @param end         : end offset of the collumn slice
- * @param destination : destination image
- */
-void sobelImageSlice(ppm_image original, unsigned int start, unsigned int end, ppm_image destination){
-  for(unsigned int i = start; i < end; i++){
-    for(unsigned int j = 1; j < destination->height -2; j++){
-      transformPixelSobel(original, i, j, destination);
-    }
-  }
-}
-
 int main(int numArgs, char **args){
   if(numArgs != 3) fail("usage: ./one <input ppm> <output ppm>");
   // reads source image file
