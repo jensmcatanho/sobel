@@ -60,6 +60,32 @@ unsigned long sizeOfImageBuffer(ppm_image image){
 }
 
 /**
+ * returns an array of arrays representing the image vertically divided
+ * by the numSlices argument.
+ * eg. an image with 1200 width and 2 slices would yield:
+ *   [[1,600], [600,1198]]
+ *   that is, slices should be from 1 to 600 and 600 to 1198.
+ * @param  image     : a PPM image
+ * @param  numSlices : the number of slices
+ * @return unsigned int[numSlices][2]
+ */
+unsigned int** getImageSliceRanges(ppm_image image, unsigned int numSlices){
+  unsigned int** slices = (unsigned int**) malloc(sizeof(*slices) * numSlices);
+  unsigned int sliceSize = image->width / numSlices;
+  unsigned int remains = image->width % numSlices;
+  unsigned int start, end, i; unsigned int slice[2];
+  for(i = 0; i < numSlices; i++){
+    start = i * sliceSize;
+    end = start + sliceSize;
+    if(start == 0) start++;
+    if(i >= numSlices-1) end += remains -2;
+    slices[i] = (int*) malloc(sizeof(*slices[i]) *2);
+    slices[i][0] = start; slices[i][1] = end;
+  }
+  return slices;
+}
+
+/**
  * adds a one-pixel thick box margin around a given ppm image buffer.
  * take note that this increases the image size by two rows and collumns
  * @param  original
