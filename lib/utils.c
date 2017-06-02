@@ -86,22 +86,6 @@ unsigned int** getImageSliceRanges(ppm_image image, unsigned int numSlices){
 }
 
 /**
- * applies the Sobel transform to a collumn slice of a given image.
- * this will be run by each process
- * @param original    : the original image
- * @param start       : start offset of the collumn slice
- * @param end         : end offset of the collumn slice
- * @param destination : destination image
- */
-void sobelImageSlice(ppm_image original, unsigned int start, unsigned int end, ppm_image destination){
-  for(unsigned int i = start; i < end; i++){
-    for(unsigned int j = 1; j < destination->height -2; j++){
-      transformPixelSobel(original, i, j, destination);
-    }
-  }
-}
-
-/**
  * adds a one-pixel thick box margin around a given ppm image buffer.
  * take note that this increases the image size by two rows and collumns
  * @param  original
@@ -161,6 +145,22 @@ void transformPixelSobel(ppm_image original, unsigned int x, unsigned int y, ppm
       char_val = 0;
 
   put_pixel_unsafe(new, x, y, char_val, char_val, char_val);
+}
+
+/**
+ * applies the Sobel transform to a collumn slice of a given image.
+ * this will be run by each process
+ * @param original    : the original image
+ * @param start       : start offset of the collumn slice
+ * @param end         : end offset of the collumn slice
+ * @param destination : destination image
+ */
+void sobelImageSlice(ppm_image original, unsigned int start, unsigned int end, ppm_image destination){
+  for(unsigned int i = start; i < end; i++){
+    for(unsigned int j = 1; j < destination->height -2; j++){
+      transformPixelSobel(original, i, j, destination);
+    }
+  }
 }
 
 /**
