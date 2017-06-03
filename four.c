@@ -89,6 +89,23 @@ ppm_image addMarginsToFragment(ppm_image original, ppm_image fragment, unsigned 
   return result;
 }
 
+void rejoinImage(ppm_image* fragments, ppm_image result, unsigned int numFragments){
+  unsigned int f, i, j, ii, jj, horizontal;
+  ii = 0; jj = 0; horizontal = 1;
+  for(f = 0; f < numFragments; f++){
+    for(i = 1; i < fragments[f]->width-2; i++){
+      jj = 0;
+      for(j = 1; j < fragments[f]->height-2; j++){
+        int* pixel = (int*) GET_PIXEL(fragments[f], i, j);
+        put_pixel_unsafe(result, ii, jj, pixel[0], pixel[1], pixel[2]);
+      jj++;
+      }
+      ii++;
+    }
+    ii+=1;
+  }
+}
+
 int main(int numArgs, char **args){
   unsigned int i;
   char* filename = "data/rio_night.ppm";
@@ -107,13 +124,23 @@ int main(int numArgs, char **args){
   pid_t pids[numProcesses]; //array which will have the PIDs of child processes
 
   ppm_image fragments[numProcesses];
+  ppm_image sobelizedFragments[numProcesses];
+
   unsigned int** slices = getImageSliceRanges(originalImage, numProcesses, false);
   for(i = 0; i < numProcesses; i++){
       ppm_image frag = getSliceFragment(originalImage, slices[i][0], slices[i][1]);
       fragments[i] = addMarginsToFragment(originalImage, frag, slices[i][0], slices[i][1]);
-      char outfile[20]; sprintf(outfile, "s_%i.ppm", slices[i][0]);
-      saveImage(fragments[i], outfile);
+
+      to_greyscale(fragments[i]);
+      sobelizedFragments[i] = alloc_img(fragments[i]->width, fragments[i]->height);
+      sobelImageSlice(fragments[i], 1, fragments[i]->width, sobelizedFragments[i]);
+
+      char filename[20]; sprintf(filename, "s_%i.ppm", i);
+      saveImage(sobelizedFragments[i], filename);
   }
+  ppm_image result = alloc_img(originalImage->width, originalImage->height);
+  rejoinImage(sobelizedFragments, result, numProcesses);
+  quickSaveImage(result);
 
   // printf("%i %i", originalImage->width, slices[4][1]);
 
