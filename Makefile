@@ -1,10 +1,29 @@
-watch:
-	while true; do make one; sleep 60; done;
-one: one.c
-	gcc -o one one.c -lm -I.
-two: two.c
-	gcc -o two two.c -lm -lpthread -I.
-three: three.c
-	gcc -o three three.c -lm -fopenmp -I.
-four: four.c
-	gcc -o four four.c -lm -I.
+CC = gcc
+CFLAGS = -lm -I.
+OBJS = utils.o neryimg.o
+TARGETPROC = sobel-process
+TARGETTHREAD = sobel-thread
+TARGETOMP = sobel-omp
+TARGETS = ${TARGETPROC} ${TARGETTHREAD} ${TARGETOMP}
+
+all: ${TARGETS}
+
+neryimg.o:
+	${CC} ${CFLAGS} lib/neryimg.c -c
+	
+utils.o:
+	${CC} ${CFLAGS} lib/utils.c -c
+	
+${TARGETPROC}: ${TARGETPROC}.c ${OBJS}
+	${CC} -o ${TARGETPROC} ${TARGETPROC}.c ${OBJS} ${CFLAGS}
+
+${TARGETTHREAD}: ${TARGETTHREAD} ${OBJS}
+	${CC} -o ${TARGETTHREAD} ${TARGETTHREAD}.c ${OBJS} -lpthread ${CFLAGS}
+
+${TARGETOMP}: ${TARGETOMP}.c ${OBJS}
+	${CC} -o ${TARGETOMP} ${TARGETOMP}.c ${OBJS} -fopenmp ${CFLAGS}
+
+.PHONY: clean
+
+clean:
+	rm ${TARGETS} *.o *~ lib/*~
